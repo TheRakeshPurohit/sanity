@@ -249,7 +249,7 @@ export default function PortableTextInput(props: Props) {
             level={block.level}
             listItem={block.listItem}
             style={block.style}
-            hasError={hasError}
+            // hasError={hasError}
           >
             {defaultRender(block)}
           </TextBlock>
