@@ -1,15 +1,18 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react'
+import {useCurrentUser} from '@sanity/base/hooks'
 import {Chunk} from '@sanity/field/diff'
 import {Text, Spinner, Flex} from '@sanity/ui'
+import {InsufficientPermissionsMessage} from '@sanity/base/components'
 import {Timeline as TimelineModel} from '../documentHistory/history/Timeline'
 import {TimelineItem} from './timelineItem'
 import {TimelineItemState} from './types'
-import {Root, StackWrapper, MenuWrapper} from './timeline.styled'
+import {Root, MessageWrapper, StackWrapper, MenuWrapper} from './timeline.styled'
 
 interface TimelineProps {
   timeline: TimelineModel
   onSelect: (chunk: Chunk) => void
   onLoadMore: (state: boolean) => void
+  hasHistoryPermission: boolean
 
   /** Are the chunks above the topSelection enabled? */
   disabledBeforeSelection?: boolean
@@ -29,12 +32,15 @@ export const Timeline = ({
   bottomSelection,
   onSelect,
   onLoadMore,
+  hasHistoryPermission,
 }: TimelineProps) => {
   const rootRef = useRef<HTMLDivElement | null>(null)
   const listRef = useRef<HTMLOListElement | null>(null)
   const [loadingElement, setLoadingElement] = useState<HTMLDivElement | null>(null)
 
   let state: TimelineItemState = disabledBeforeSelection ? 'disabled' : 'enabled'
+
+  const {value: currentUser} = useCurrentUser()
 
   const checkIfLoadIsNeeded = useCallback(() => {
     const rootEl = rootRef.current
@@ -53,6 +59,14 @@ export const Timeline = ({
 
   // Load whenever it's needed
   useEffect(checkIfLoadIsNeeded, [checkIfLoadIsNeeded])
+
+  if (!hasHistoryPermission) {
+    return (
+      <MessageWrapper>
+        <InsufficientPermissionsMessage currentUser={currentUser} />
+      </MessageWrapper>
+    )
+  }
 
   return (
     <Root ref={rootRef as any} onScroll={checkIfLoadIsNeeded} data-ui="timeline">

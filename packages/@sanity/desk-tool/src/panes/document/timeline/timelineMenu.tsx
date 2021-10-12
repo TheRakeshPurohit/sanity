@@ -35,7 +35,14 @@ const Root = styled(Popover)`
 `
 
 export function TimelineMenu({chunk, mode}: TimelineMenuProps) {
-  const {historyController, setTimelineRange, setTimelineMode, timeline, ready} = useDocumentPane()
+  const {
+    historyController,
+    setTimelineRange,
+    setTimelineMode,
+    timeline,
+    ready,
+    permission: {granted},
+  } = useDocumentPane()
   const [open, setOpen] = useState(false)
   const [buttonRef, setButtonRef] = useState<HTMLButtonElement | null>(null)
   const [menuContent, setMenuContent] = useState<HTMLDivElement | null>(null)
@@ -90,6 +97,7 @@ export function TimelineMenu({chunk, mode}: TimelineMenuProps) {
           onSelect={selectRev}
           onLoadMore={loadMoreHistory}
           timeline={timeline}
+          hasHistoryPermission={granted}
           {...revTimelineProps(historyController.realRevChunk)}
         />
       ) : (
@@ -97,6 +105,7 @@ export function TimelineMenu({chunk, mode}: TimelineMenuProps) {
           onSelect={selectSince}
           onLoadMore={loadMoreHistory}
           timeline={timeline}
+          hasHistoryPermission={granted}
           {...sinceTimelineProps(historyController.sinceTime!, historyController.realRevChunk)}
         />
       )}

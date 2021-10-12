@@ -5,6 +5,11 @@ export const Root = styled(Box)`
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 `
+
+export const MessageWrapper = styled.div`
+  max-width: 300px;
+`
+
 export const StackWrapper = styled(Stack)`
   max-width: 200px;
 `
