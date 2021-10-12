@@ -7,10 +7,11 @@ interface Params {
   changesOpen: boolean
   hasValue: boolean
   previewUrl: string | null
+  granted: boolean
 }
 
 const getHistoryMenuItem = (params: Params): MenuItemType | null => {
-  const {features, hasValue, changesOpen} = params
+  const {features, hasValue, changesOpen, granted} = params
 
   if (!features.reviewChanges) return null
 
@@ -18,7 +19,7 @@ const getHistoryMenuItem = (params: Params): MenuItemType | null => {
     action: 'reviewChanges',
     title: 'Review changes',
     icon: RestoreIcon,
-    isDisabled: changesOpen || !hasValue,
+    isDisabled: changesOpen || !hasValue || !granted,
   }
 }
 

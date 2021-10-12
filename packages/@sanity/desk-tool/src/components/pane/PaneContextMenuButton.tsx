@@ -99,5 +99,13 @@ function PaneContextMenuItem(props: {
     return item.shortcut.split('+')
   }, [item])
 
-  return <MenuItem hotkeys={hotkeys} icon={item.icon} onClick={handleClick} text={item.title} />
+  return (
+    <MenuItem
+      disabled={item.isDisabled}
+      hotkeys={hotkeys}
+      icon={item.icon}
+      onClick={handleClick}
+      text={item.title}
+    />
+  )
 }

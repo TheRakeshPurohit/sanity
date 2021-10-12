@@ -93,14 +93,14 @@ export const DocumentPaneProvider = function DocumentPaneProvider(
     value,
   ])
   const hasValue = Boolean(value)
-  const menuItems = useMemo(() => getMenuItems({features, hasValue, changesOpen, previewUrl}), [
-    features,
-    hasValue,
-    changesOpen,
-    previewUrl,
-  ])
   const requiredPermission = value?._createdAt ? 'update' : 'create'
   const permission = useCheckDocumentPermission(documentId, documentType, requiredPermission)
+  const {granted} = permission
+
+  const menuItems = useMemo(
+    () => getMenuItems({features, hasValue, changesOpen, previewUrl, granted}),
+    [features, hasValue, changesOpen, previewUrl, granted]
+  )
   const inspectOpen = params.inspect === 'on'
   const compareValue: Partial<SanityDocument> | null = changesOpen
     ? (historyController.sinceAttributes() as any)
