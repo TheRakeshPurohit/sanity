@@ -20,6 +20,7 @@ import resolveDocumentBadges from 'part:@sanity/base/document-badges/resolver'
 import {getPublishedId} from 'part:@sanity/base/util/draft-utils'
 import schema from 'part:@sanity/base/schema'
 import {useMemoObservable} from 'react-rx'
+import {NEVER} from 'rxjs'
 import {useDeskTool} from '../../contexts/deskTool'
 import {usePaneRouter} from '../../contexts/paneRouter'
 import {useUnique} from '../../lib/useUnique'
@@ -71,17 +72,23 @@ export const DocumentPaneProvider = function DocumentPaneProvider(
     documentId,
   ])
   const [timelineMode, setTimelineMode] = useState<'since' | 'rev' | 'closed'>('closed')
+
+  const hasValue = Boolean(value)
+  const requiredPermission = value?._createdAt ? 'update' : 'create'
+  const permission = useCheckDocumentPermission(documentId, documentType, requiredPermission)
+  const {granted} = permission
+
   // NOTE: this emits sync so can never be null
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const {historyController} = useMemoObservable(
-    () =>
-      createObservableController({
-        timeline,
-        documentId,
-        client: versionedClient,
-      }),
-    [documentId, timeline]
-  )!
+  const {historyController} = useMemoObservable(() => {
+    return granted
+      ? createObservableController({
+          timeline,
+          documentId,
+          client: versionedClient,
+        })
+      : NEVER
+  }, [documentId, timeline, granted])!
   /**
    * @todo: this will now happen on each render, but should be refactored so it happens only when
    * the `rev`, `since` or `historyController` values change.
@@ -92,10 +99,6 @@ export const DocumentPaneProvider = function DocumentPaneProvider(
     historyController,
     value,
   ])
-  const hasValue = Boolean(value)
-  const requiredPermission = value?._createdAt ? 'update' : 'create'
-  const permission = useCheckDocumentPermission(documentId, documentType, requiredPermission)
-  const {granted} = permission
 
   const menuItems = useMemo(
     () => getMenuItems({features, hasValue, changesOpen, previewUrl, granted}),
