@@ -39,14 +39,7 @@ export function ElementWithChangeBar(props: {
           />
         </ChangeBar>
       ),
-    [
-      handleMouseEnter,
-      handleMouseLeave,
-      isReviewChangesOpen,
-      onOpenReviewChanges,
-      isChanged,
-      disabled,
-    ]
+    [handleMouseEnter, handleMouseLeave, isReviewChangesOpen, onOpenReviewChanges, disabled]
   )
 
   return (
