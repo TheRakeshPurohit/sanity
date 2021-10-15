@@ -1,3 +1,4 @@
+import {NONAME} from 'dns'
 import {MenuItem as MenuItemType, MenuItemGroup} from '@sanity/base/__legacy/@sanity/components'
 import {ArrowLeftIcon, UnknownIcon} from '@sanity/icons'
 import {InitialValueTemplateItem, StructureBuilder as S} from '@sanity/structure'
@@ -5,19 +6,19 @@ import {SchemaType} from '@sanity/types'
 import {Box, Button, Inline, Text, Tooltip} from '@sanity/ui'
 import schema from 'part:@sanity/base/schema'
 import React, {useCallback, useMemo} from 'react'
+import {combineLatest, of} from 'rxjs'
+import {useMemoObservable} from 'react-rx'
+import {filter, map, switchMap, tap} from 'rxjs/operators'
+import {canCreate} from '@sanity/base/_internal'
 import {IntentButton} from '../../components/IntentButton'
 import {PaneContextMenuButton, PaneHeader, usePane} from '../../components/pane'
 import {useDeskTool} from '../../contexts/deskTool'
 import {BackLink} from '../../contexts/paneRouter'
 import {DeskToolPaneActionHandler} from '../../types/types'
 import {useDeskToolPaneActions} from '../useDeskToolPaneActions'
+import {getInitialValueObservable} from '../document/lib/initialValue/getInitialValue'
 import {Layout, SortOrder} from './types'
 import {CreateMenuButton} from './CreateMenuButton'
-import {getInitialValueObservable} from '../document/lib/initialValue/getInitialValue'
-import {combineLatest, of} from 'rxjs'
-import {useMemoObservable} from 'react-rx'
-import {filter, map, switchMap, tap} from 'rxjs/operators'
-import {canCreate} from '@sanity/base/_internal'
 
 /**
  * Detects whether a menu item is the default create menu item.
@@ -130,7 +131,7 @@ export function DocumentListPaneHeader(props: {
 
   const createMenuItemPermissions = useMemoObservable(
     () => resolveInitialValuesFromTemplates(initialValueTemplates),
-    [initialValueTemplates]
+    ([initialValueTemplates] as unknown[]) as {granted: boolean; reason: string}[]
   )
 
   const actions = useMemo(() => {
@@ -149,7 +150,12 @@ export function DocumentListPaneHeader(props: {
         )
       }
 
+      console.log('DOCUMENT HEADER')
+      console.log(createMenuItemPermissions || [])
       if (action.intent) {
+        // when it's single action
+        //const permission = createMenuItemPermissions ? createMenuItemPermissions[0].granted : true
+        //console.log(permission)
         return (
           <Tooltip
             content={
@@ -162,6 +168,7 @@ export function DocumentListPaneHeader(props: {
             placement="bottom"
           >
             <IntentButton
+              disabled={false}
               aria-label={String(action.title)}
               icon={action.icon || UnknownIcon}
               intent={action.intent}
