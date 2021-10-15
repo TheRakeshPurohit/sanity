@@ -1,4 +1,3 @@
-import {Box, Text, Tooltip} from '@sanity/ui'
 import React, {useCallback, useMemo, useState} from 'react'
 import {ConnectorContext} from './ConnectorContext'
 
@@ -7,8 +6,6 @@ import {
   FieldWrapper,
   TooltipTriggerWrapper,
   BarWrapper,
-  BadgeWrapper,
-  ShapeWrapper,
   ButtonWrapper,
 } from './ChangeBar.styled'
 
@@ -31,10 +28,6 @@ export function ChangeBar(props: {
       disabled ? null : (
         <TooltipTriggerWrapper>
           <BarWrapper />
-
-          <BadgeWrapper>
-            <ShapeWrapper />
-          </BadgeWrapper>
 
           <ButtonWrapper
             tabIndex={isReviewChangesOpen || !isChanged ? -1 : 0}
