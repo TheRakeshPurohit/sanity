@@ -30,7 +30,7 @@ export function ElementWithChangeBar(props: {
           <ChangeBarMarker />
 
           <ChangeBarButton
-            tabIndex={isReviewChangesOpen || !isChanged ? -1 : 0}
+            tabIndex={-1}
             type="button"
             aria-label="Review changes"
             onClick={isReviewChangesOpen ? undefined : onOpenReviewChanges}
