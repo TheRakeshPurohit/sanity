@@ -22,15 +22,15 @@ function getSchemaType(typeName: string): SchemaType {
 }
 
 export function canCreate(document: {_id?: string; _type?: string}) {
-  console.log('HIGH LEVEL')
-  console.log(document)
   return grantsStore.checkDocumentPermission('create', document)
 }
 
 export function canCreateType(id: string, typeName: string) {
   const type = getSchemaType(typeName)
   return from(resolveInitialValueForType(type)).pipe(
-    mergeMap((initialValue: {_id?: string; _type?: string}) => canCreate(initialValue))
+    mergeMap((initialValue: {_id?: string; _type?: string}) =>
+      canCreate({...initialValue, _id: type.liveEdit ? id : `drafts.${id}`, _type: typeName})
+    )
   )
 }
 
