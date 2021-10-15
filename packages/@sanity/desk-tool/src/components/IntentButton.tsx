@@ -4,7 +4,7 @@ import React, {forwardRef, useMemo} from 'react'
 import {RouterIntent} from '../types'
 
 export const IntentButton = forwardRef(function IntentButton(
-  props: {intent: RouterIntent} & Omit<ButtonProps, 'as' | 'href' | 'type'>,
+  props: {intent: RouterIntent; disabled: boolean} & Omit<ButtonProps, 'as' | 'href' | 'type'>,
   ref: React.ForwardedRef<HTMLAnchorElement>
 ) {
   const {intent, ...restProps} = props
@@ -23,7 +23,9 @@ export const IntentButton = forwardRef(function IntentButton(
     [intent]
   )
 
-  return (
+  return props.disabled ? (
+    <Button {...props} as="a" role="link" aria-disabled="true" />
+  ) : (
     <Button
       {...restProps}
       as={Link}
