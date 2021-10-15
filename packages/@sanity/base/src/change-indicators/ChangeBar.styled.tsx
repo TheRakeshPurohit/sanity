@@ -42,12 +42,11 @@ export const BarWrapper = styled.div(({theme}: ThemeContext) => {
   return css`
     position: absolute;
     top: 0;
-    left: -1px;
+    left: 2px;
     width: 2px;
     bottom: 0;
     background-color: ${notSelectedColor};
-    border-bottom-right-radius: 2px;
-    border-top-right-radius: 2px;
+    border-radius: 2px;
 
     @media (min-width: ${screenMedium}px) {
       display: unset;
@@ -60,14 +59,13 @@ export const BadgeWrapper = styled.div(({theme}: ThemeContext) => {
 
   return css`
     position: absolute;
-    top: 50%;
-    left: -9px;
+    top: -8px;
+    left: -4px;
     width: 19px;
-    height: 19px;
+    height: calc(100% + 16px);
     border-radius: 9.5px;
-    transform: translate3d(-0.5px, -10px, 0) scale(0, 1);
-
-    transition: transform ${animationSpeed}ms, opacity ${animationSpeed}ms;
+    opacity: 0;
+    transition: opacity ${animationSpeed}ms;
 
     @media (max-width: ${maxScreenMedium}px) {
       /* hide on mobile */
@@ -90,7 +88,7 @@ export const EditIconWrapper = styled(EditIcon)`
   }
 `
 
-export const ShapeWrapper = styled(Shape)(({theme}: ThemeContext) => {
+export const ShapeWrapper = styled.div(({theme}: ThemeContext) => {
   /* these colours aren't freely available on the current theme */
   const notSelectedColor = theme.sanity.color.spot.yellow
   const maxScreenMedium = theme.sanity.media[0] - 1
@@ -98,9 +96,10 @@ export const ShapeWrapper = styled(Shape)(({theme}: ThemeContext) => {
   return css`
     display: block;
     position: absolute;
-    width: 20px;
-    height: 27px;
-    transform: translate3d(-0.5px, -4px, 0);
+    width: 15px;
+    height: 100%;
+    border-radius: 12px;
+    background: ${notSelectedColor};
     color: ${notSelectedColor};
 
     @media (max-width: ${maxScreenMedium}px) {
@@ -132,7 +131,8 @@ export const ButtonWrapper = styled.button`
 /* for when the shape and icon need to appear on the page */
 const BadgeOpen = css`
   ${BadgeWrapper} {
-    transform: translate3d(-0.5px, -10px, 0) scale(1);
+    opacity: 0.2;
+    transition: opacity ${animationSpeed}ms;
   }
 
   ${EditIconWrapper} {
@@ -161,7 +161,7 @@ export const ChangeBarWrapper = styled.div(
 
       /* on focus */
 
-      ${focus &&
+      /* ${focus &&
       css`
         ${ShapeWrapper} {
           color: var(--card-focus-ring-color);
@@ -174,7 +174,7 @@ export const ChangeBarWrapper = styled.div(
           }
           background-color: var(--card-focus-ring-color);
         }
-      `}
+      `} */
 
       /* on hover */
 
@@ -183,8 +183,7 @@ export const ChangeBarWrapper = styled.div(
         ${BadgeOpen}
       `}
 
-
-    /* when field changed */
+      /* when field changed */
 
     ${!changed &&
       css`

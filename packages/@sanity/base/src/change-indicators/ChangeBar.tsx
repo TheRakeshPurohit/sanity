@@ -9,7 +9,6 @@ import {
   BarWrapper,
   BadgeWrapper,
   ShapeWrapper,
-  EditIconWrapper,
   ButtonWrapper,
 } from './ChangeBar.styled'
 
@@ -30,36 +29,22 @@ export function ChangeBar(props: {
   const tooltip = useMemo(
     () =>
       disabled ? null : (
-        <Tooltip
-          content={
-            <Box padding={2}>
-              <Text muted size={1}>
-                Review changes
-              </Text>
-            </Box>
-          }
-          disabled={!isChanged || isReviewChangesOpen}
-          placement="top"
-          portal
-        >
-          <TooltipTriggerWrapper>
-            <BarWrapper />
+        <TooltipTriggerWrapper>
+          <BarWrapper />
 
-            <BadgeWrapper>
-              <ShapeWrapper />
-              <EditIconWrapper />
-            </BadgeWrapper>
+          <BadgeWrapper>
+            <ShapeWrapper />
+          </BadgeWrapper>
 
-            <ButtonWrapper
-              tabIndex={isReviewChangesOpen || !isChanged ? -1 : 0}
-              type="button"
-              aria-label="Review changes"
-              onClick={isReviewChangesOpen ? undefined : onOpenReviewChanges}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            />
-          </TooltipTriggerWrapper>
-        </Tooltip>
+          <ButtonWrapper
+            tabIndex={isReviewChangesOpen || !isChanged ? -1 : 0}
+            type="button"
+            aria-label="Review changes"
+            onClick={isReviewChangesOpen ? undefined : onOpenReviewChanges}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          />
+        </TooltipTriggerWrapper>
       ),
     [
       handleMouseEnter,
