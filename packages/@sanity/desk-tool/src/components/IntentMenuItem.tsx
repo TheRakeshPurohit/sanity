@@ -4,7 +4,7 @@ import React, {forwardRef, useMemo} from 'react'
 import {RouterIntent} from '../types'
 
 export const IntentMenuItem = forwardRef(function IntentMenuItem(
-  props: {intent: RouterIntent} & Omit<MenuItemProps, 'as' | 'href'>,
+  props: {intent: RouterIntent; disabled: boolean} & Omit<MenuItemProps, 'as' | 'href'>,
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   const {intent, ...restProps} = props
@@ -23,5 +23,9 @@ export const IntentMenuItem = forwardRef(function IntentMenuItem(
     [intentType, params]
   )
 
-  return <MenuItem {...restProps} as={Link} data-as="a" ref={ref} />
+  return props.disabled ? (
+    <MenuItem {...restProps} as="a" data-as="as" aria-disabled="true" />
+  ) : (
+    <MenuItem {...restProps} as={Link} data-as="a" ref={ref} />
+  )
 })
