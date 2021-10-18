@@ -6,6 +6,7 @@ import {usePaneRouter} from '../../contexts/paneRouter'
 import {BaseDeskToolPaneProps} from '../types'
 import {DeskToolPaneActionHandler} from '../../types'
 import {UserComponentPaneHeader} from './UserComponentPaneHeader'
+import {UserComponentPaneContent} from './UserComponentPaneContent'
 
 type UserComponentPaneProps = BaseDeskToolPaneProps<{
   id: string
@@ -37,17 +38,18 @@ export function UserComponentPane(props: UserComponentPaneProps) {
         menuItemGroups={menuItemGroups}
         title={title}
       />
+      <UserComponentPaneContent>
+        {isValidElementType(component) &&
+          createElement(component, {
+            ...restProps,
+            ...restPane,
+            ref: userComponent,
+            // NOTE: this is for backwards compatibility (<= 2.20.0)
+            urlParams: params,
+          })}
 
-      {isValidElementType(component) &&
-        createElement(component, {
-          ...restProps,
-          ...restPane,
-          ref: userComponent,
-          // NOTE: this is for backwards compatibility (<= 2.20.0)
-          urlParams: params,
-        })}
-
-      {isValidElement(component) && component}
+        {isValidElement(component) && component}
+      </UserComponentPaneContent>
     </Pane>
   )
 }
