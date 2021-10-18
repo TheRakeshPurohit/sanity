@@ -150,31 +150,33 @@ export function DocumentListPaneHeader(props: {
         )
       }
 
-      console.log('DOCUMENT HEADER')
-      console.log(createMenuItemPermissions || [])
       if (action.intent) {
         // when it's single action
-        //const permission = createMenuItemPermissions ? createMenuItemPermissions[0].granted : true
-        //console.log(permission)
+        const permission = createMenuItemPermissions || []
+        const granted = permission.length > 0 ? permission[0].granted : true
+        const reason = permission.length > 0 ? permission[0].reason : ''
+
         return (
           <Tooltip
             content={
               <Box padding={2}>
-                <Text size={1}>{action.title}</Text>
+                <Text size={1}>{granted ? action.title : reason}</Text>
               </Box>
             }
             disabled={!action.title}
             key={action.key || actionIndex}
             placement="bottom"
           >
-            <IntentButton
-              disabled={false}
-              aria-label={String(action.title)}
-              icon={action.icon || UnknownIcon}
-              intent={action.intent}
-              key={action.key || actionIndex}
-              mode="bleed"
-            />
+            <div>
+              <IntentButton
+                disabled={!granted}
+                aria-label={String(action.title)}
+                icon={action.icon || UnknownIcon}
+                intent={action.intent}
+                key={action.key || actionIndex}
+                mode="bleed"
+              />
+            </div>
           </Tooltip>
         )
       }
